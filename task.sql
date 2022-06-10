@@ -12,8 +12,7 @@ from film,
 where film.film_id = film_actor.film_id
   and actor.actor_id = film_actor.actor_id
 group by first_name, last_name
-order by rentals desc
-limit 10;
+order by rentals desc limit 10;
 
 
 with a as (select sum(amount), name
@@ -29,8 +28,7 @@ with a as (select sum(amount), name
            group by name
            order by sum desc)
 select *
-from a
-limit 1;
+from a limit 1;
 
 
 select title
@@ -59,15 +57,16 @@ from b
 where top <= 3;
 
 
-with a as (select city, activebool
-           from address,
-                city,
-                customer
-           where city.city_id = addressselect city, sum(case when customer.active = 1 then 1 else 0 end) as active, sum(case when customer.active <> 1 then 1 else 0 end) as inactive
-           from address, city, customer
-           where city.city_id = address.city_id and address.address_id = customer.address_id
-           group by city
-           order by inactive desc;
+select city,
+       sum(case when customer.active = 1 then 1 else 0 end)  as active,
+       sum(case when customer.active <> 1 then 1 else 0 end) as inactive
+from address,
+     city,
+     customer
+where city.city_id = address.city_id
+  and address.address_id = customer.address_id
+group by city
+order by inactive desc;
 
 
 with a as (select sum(extract(epoch from (return_date - rental_date)) / 3600) as hours, name, city
